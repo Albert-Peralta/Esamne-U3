@@ -69,5 +69,17 @@ public class OrdenService {
     }
 
     public static Object eliminarOrden(Integer id) {
+        Map<String, Object> mapResponse = new HashMap<>();
+        Optional<OrdenCompra> ordenCompra = OrdenRepository.findById(id);
+        if (ordenCompra.isPresent()) {
+            OrdenCompra productoExistente = ordenCompra.get();
+            OrdenRepository.delete(productoExistente);
+            mapResponse.put("mensaje", "Orden eliminado correctamente");
+            mapResponse.put("producto", productoExistente);
+        }else {
+            mapResponse.put("mensaje", "La orden no existe, no se puede eliminar");
+            mapResponse.put("code", 404);
+        }
+        return mapResponse;
     }
 }
